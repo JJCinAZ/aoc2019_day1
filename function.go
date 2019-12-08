@@ -16,9 +16,19 @@ func HelloWorld(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid input:"+line, http.StatusNotAcceptable)
 			return
 		} else {
-			fuel += mass / 3 - 2
+			fuel += calcFuel(mass)
 		}
 	}
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.Write([]byte(strconv.FormatInt(fuel, 10)))
+}
+
+func calcFuel(mass int64) int64 {
+	fuel := mass / 3 - 2
+	fuel2 := fuel / 3 - 2
+	for fuel2 > 0 {
+		fuel += fuel2
+		fuel2 = fuel2 / 3 - 2
+	}
+	return fuel
 }
